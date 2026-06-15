@@ -1,4 +1,3 @@
-cat > backend/models/Wishlist.js << 'EOF'
 const mongoose = require('mongoose');
 
 const WishlistSchema = new mongoose.Schema({
@@ -35,4 +34,3 @@ WishlistSchema.pre('save', function(next) {
 });
 
 module.exports = mongoose.model('Wishlist', WishlistSchema);
-EOF
