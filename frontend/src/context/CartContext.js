@@ -16,45 +16,42 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('freshbasket_token');
     setIsLoggedIn(!!token);
-  }, []);
+    }, []);
 
-  // Load cart from database when logged in
-  useEffect(() => {
-    if (isLoggedIn) {
-      loadCartFromDB();
-    } else {
-      // Load from localStorage when not logged in
-      const savedCart = localStorage.getItem('freshbasket_cart');
-      if (savedCart) {
-        const items = JSON.parse(savedCart);
-        setCartItems(items);
-        updateTotals(items);
-      }
-      setLoading(false);
-    }
-  }, [loadCartFromDB]);
-
-  const loadCartFromDB = async () => {
+     const loadCartFromDB = async () => {
     try {
-      const response = await api.get('/cart');
-      const dbCart = response.data.cart;
-      const items = dbCart.items.map(item => ({
-        id: item.productId,
-        name: item.name,
-        price: item.price,
-        weight: item.weight,
-        image: item.image,
-        quantity: item.quantity,
-        variant: item.variant || 'Standard',
-      }));
+    const response = await api.get('/cart');
+    const dbCart = response.data.cart;
+    const items = dbCart.items.map(item => ({
+      id: item.productId,
+      name: item.name,
+      price: item.price,
+      weight: item.weight,
+      image: item.image,
+      quantity: item.quantity,
+      variant: item.variant || 'Standard',
+    }));
+    setCartItems(items);
+    updateTotals(items);
+  } catch (error) {
+    console.error('Error loading cart:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+  useEffect(() => {
+  if (isLoggedIn) {
+    loadCartFromDB();
+  } else {
+    const savedCart = localStorage.getItem('freshbasket_cart');
+    if (savedCart) {
+      const items = JSON.parse(savedCart);
       setCartItems(items);
       updateTotals(items);
-    } catch (error) {
-      console.error('Error loading cart:', error);
-    } finally {
-      setLoading(false);
     }
-  };
+    setLoading(false);
+  }
+}, [isLoggedIn]);
 
   const updateTotals = (items) => {
     const count = items.reduce((sum, item) => sum + item.quantity, 0);

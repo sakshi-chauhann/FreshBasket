@@ -19,10 +19,7 @@ const AdminOrders = () => {
     'cancelled': 'bg-red-200 text-red-800',
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
-
+ 
   const fetchOrders = async () => {
     try {
       const response = await api.get(`/tracking/admin/orders?status=${filter}`);
@@ -34,6 +31,11 @@ const AdminOrders = () => {
       setLoading(false);
     }
   };
+     
+      useEffect(() => {
+      fetchOrders();
+      }, [filter]);
+    
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {

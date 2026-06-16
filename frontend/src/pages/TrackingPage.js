@@ -9,9 +9,7 @@ const TrackingPage = () => {
   const [tracking, setTracking] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchTracking();
-  }, [fetchTracking]);
+
 
   const fetchTracking = async () => {
     try {
@@ -24,6 +22,10 @@ const TrackingPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+  fetchTracking();
+}, [orderId]);
 
   const getStatusColor = (status) => {
     const colors = {
