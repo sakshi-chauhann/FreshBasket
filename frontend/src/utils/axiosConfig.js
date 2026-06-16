@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-// Create axios instance with base URL
+// Use the live backend URL directly (no environment variable needed)
+const API_URL = 'https://freshbasket-ppj4.onrender.com/api';
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: API_URL,
 });
 
-// Add token to every request if it exists
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('freshbasket_token');
@@ -17,22 +15,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Handle token expiration
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('freshbasket_token');
-      localStorage.removeItem('freshbasket_user');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default api;
