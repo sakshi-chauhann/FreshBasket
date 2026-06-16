@@ -2,7 +2,8 @@ import React from 'react';
 
 const GoogleLoginButton = () => {
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:5000/api/auth/google';
+    // Use your live backend URL
+    window.location.href = 'https://freshbasket-ppj4.onrender.com/api/auth/google';
   };
 
   return (
